@@ -6,7 +6,7 @@ Geoscience Multiverse
 
 ### figmm::conf 2022 workshop
 
-by  Ing. A.Otiniano & Ing. J.Andrade - Dr. Jimmy Rosales Huamani
+by  Ing. A.Otiniano, Ing. J.Andrade & Ing. Robert. Perez - Dr. Jimmy Rosales Huamani
 Grupo: Sensado Multidisciplinario, Accesibilidad Universaly Machine Learning
 
 Este repositorio es la base para el desarrollo del curso Geodatabase e Introducción Análisis de Dato (SQL – R – Qgis - Python)
@@ -101,7 +101,7 @@ Agenda
 1. **Alonso Otiniano** Tema IIA: R y Rstudio.
 2. **Alonso Otiniano** Tema IIB: Conexión y Estadística Básica.
 3. **Alonso Otiniano** Tema IIC1: AED Geoquímica Sedimentos de Quebrada (Proyecto Minero Colca y Jala Oca).
-5. **Alonso Otiniano** Tema IIC3: AED Suelos (Honoria-Tournavista). - Paper publicado por Grupo.
+5. **Alonso Otiniano** Tema IIC3: AED Suelos (Honoria-Tournavista). - [Study to Determine Levels of Cadmium in Cocoa Crops Applied to Inland Areas of Peru: “The Case of the Campo Verde-Honoria Tournavista Corridor”](https://www.mdpi.com/2073-4395/10/10/1576).
 
 `Parte IIIA`:
 
@@ -117,7 +117,7 @@ Agenda
 1. Machine Learning Aplicado a Aguas Superficiales.
 2. Machine Learning No Supervisado en Clusterización Geoquímica.
 3. Artificial Neural Networks aplicado a Peligros Geológicos.
-4. Design of a predictive model of a rock breakage by blasting using Artificial Neural Networks.
+4. [Design of a predictive model of a rock breakage by blasting using Artificial Neural Networks](https://www.mdpi.com/806038)
 
 `Parte IV`:
 
