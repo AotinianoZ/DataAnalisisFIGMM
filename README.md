@@ -36,6 +36,7 @@ Este repositorio es la base para el desarrollo del curso Geodatabase e Introducc
 
 * Alonso Otiniano [@OtinianoAlonso](https://twitter.com/OtinianoAlonso)
 * Joseps Andrade [@jacxter666 ](https://twitter.com/jacxter666)
+* Robert Perez [@roberthcero](https://twitter.com/roberthcero)
 
 **Auspiciado por**
 
