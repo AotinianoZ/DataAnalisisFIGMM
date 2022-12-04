@@ -108,8 +108,7 @@ Agenda
 
 **Alonso Otiniano**
 
-1. Introducción a Data Geoespacial en R.
-2. Machine Learning Aplicado a Geología.
+1. Machine Learning Aplicado a Geología.
 
 `Parte IIIB`:
 
