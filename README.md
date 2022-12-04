@@ -108,7 +108,7 @@ Agenda
 
 **Alonso Otiniano**
 
-1. Machine Learning Aplicado a Geología.
+1. Introducción al Machine Learning Aplicado FIGMM.
 
 `Parte IIIB`:
 
