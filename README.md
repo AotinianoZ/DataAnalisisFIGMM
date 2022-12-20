@@ -15,7 +15,7 @@ Este repositorio es la base para el desarrollo del curso Geodatabase e Introducc
 
 :spiral_calendar: Diciembre - Enero, 2022-2023 
 
-:running_man: Comienza Sabado, 10 de Diciembre :jack_o_lantern:
+:running_man: Comienza Sabado, 07 de Diciembre :jack_o_lantern:
 
 :green_book: Sabado
 
