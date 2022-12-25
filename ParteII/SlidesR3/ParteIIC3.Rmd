@@ -1,0 +1,307 @@
+---
+title: "Análisis Exploratorio de Datos Proyecto Minero Jala Oca y Colca"
+author: "A.Otiniano (data por C. Geraldino)"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+    code_folding: show
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    theme: flatly
+    highlight: "espresso"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoiYWxvbnNvMjUiLCJhIjoiY2tveGJseXJpMGNmcDJ3cDhicmZwYmY3MiJ9.SbThU_R8YGE1Zll-nNrZKA')
+
+library(readxl) # lectura archivos excel.
+library(tidyverse);library(corrplot) # librearias de tratamiento de data
+library(sf); library(raster); library(rgdal) # librerias espaciales basicas
+library(mapview); library(mapedit); library(mapdeck) # librerias espaciales visualizacion especifica
+library(leaflet); library(leaflet.extras); library(leafpop)
+library(htmltools)
+#ms <- mapdeck_style("satellite")
+#mapviewOptions(basemaps = "Esri.WorldImagery")
+#Librerias Requeridas
+# Load libraries for the NADA online course 
+loadlibs <-function(x =0){
+  require(fitdistrplus)
+  require(Kendall)
+  require(multcomp)
+  require(NADA)
+  require(perm)
+  require (survminer)
+  #   additional packages
+  require(car)
+  require(bestglm)
+  require(rms)
+  require(vegan) 
+  require (cenGAM)
+  require (mgcv)
+  require(nlme)
+  require(coin)
+  require(NADA2)
+  require(EnvStats)
+}
+loadlibs()
+cat(" R libraries loaded for Nondetects And Data Analysis online course","\n", " written by Dennis R. Helsel, Practical Stats. Home page practicalstats.com",'\n')
+
+
+```
+
+# Contexto
+
+https://www.rumbominero.com/peru/noticias/mineria/chinalco-se-adjudica-los-prospectos-mineros-colca-y-jalaoca/
+
+http://www.consulado.pe/es/Tokio/Documents/Colca-Jalaoca-castellano.pdf
+
+
+# Carga de Data y Exploracion
+
+```{r}
+colja <- readxl::read_xlsx(path = "data_IIC3/GQ_Colca.xlsx", sheet = "GQ_Colca_intr", col_names = TRUE)
+colja2 <- readxl::read_xlsx(path = "data_IIC3/GQ_Colca.xlsx", sheet = "GQ_Colca_volc", col_names = TRUE)
+colnames(colja)
+colnames(colja2)
+id <- colnames(colja)==colnames(colja2)
+which(id==FALSE)
+id <- colja$MUESTRA == colja2$MUESTRA
+which(id==TRUE)
+
+colja <- rbind(colja, colja2)
+str(colja)
+col <- c("MUESTRA","ROCA","Tipo_roca")
+colja[col] <- lapply(colja[col] , factor)
+summary(colja)
+
+# convertir los caracters a factores
+colja <- mutate_if(colja, is.character, as.factor)
+
+# convertir los caracteres 'MUESTRA', 'ROCA', etc. to factor:
+colja <- mutate_at(colja, vars(MUESTRA, ROCA), as.factor)
+
+```
+
+# Data debajo del límite de detección
+
+## Buscando el Oro
+
+```{r}
+colja$Au_ppb
+# preparando para tratamiento
+Au <- gsub("<", "", x = colja$Au_ppb) # Genero solo valores
+CenAu <- str_detect(colja$Au_ppb, "<") # identifico cuales estan debajo del LD
+colja$Au_com <- as.numeric(Au)
+colja$CenAu <- as.logical(CenAu)
+```
+
+### Algunos simples analisis
+
+```{r}
+attach(colja)
+
+cboxplot(Au_com, CenAu)
+cboxplot(Au_com, CenAu, xgroup = Tipo_roca, show = TRUE)
+
+#CDF-Empirical
+cen_ecdf(Au_com, CenAu, Tipo_roca, Ylab = "Au concentration, in ppb")
+
+cenCompareCdfs(Au_com, CenAu)
+cenCompareCdfs(Au_com, CenAu, dist3="weibull")
+
+#Q-Q plot
+cenQQ(Au_com, CenAu) #default lognormal comparison
+#Shapiro-Francia W=0.894 (like r-square to PPCC)
+```
+
+### Bivariantes
+
+El oro relacionado con el Cu, además se puede relacionar al Pb, Zn y Mo.
+
+```{r}
+colja$Cu_ppm
+# preparando para tratamiento
+Cu <- gsub(">", "", x = colja$Cu_ppm) # Genero solo valores
+CenCu <- str_detect(colja$Au_ppb, ">") # identifico cuales estan arriba del LD
+colja$Cu_com <- as.numeric(Cu)
+colja$CenCu <- as.logical(CenCu)
+attach(colja)
+cenxyplot(Au_com, CenAu, Cu_com, CenCu, xlab="Au", ylab="Cu")
+
+cenperm2(Au_com, CenAu, Tipo_roca) # test permutacion robusto
+cen1way (Au_com, CenAu, Tipo_roca) # test de Peto-Peto
+
+cen_ecdf (Cu_com, CenCu, Tipo_roca)
+cen_ecdf (Au_com, CenAu, Tipo_roca)
+```
+
+# Análisis Espacial y Transformación
+
+```{r}
+couch_data <- read_xlsx(path = "data_IIC3/GQ_Colca_Limpio.xlsx", col_names = TRUE)
+str(couch_data)
+
+carac <- c(2,5:8)
+couch_data[carac] <- lapply(couch_data[carac] , factor)
+str(couch_data)
+
+a <- cor(couch_data[ ,9:ncol(couch_data)])
+a[a < -0.5 | a < 0.5] = 0
+corrplot::corrplot(a)
+```
+
+
+```{r}
+Apur <- couch_data[ ,c("NORTE","ESTE")]
+Apur <- Apur[ ,order(c(names(Apur)))]
+sputm  <- SpatialPoints(Apur, proj4string=CRS("+proj=utm +zone=18 +south +datum=WGS84")) 
+spgeo  <- spTransform(sputm, CRS("+proj=longlat +datum=WGS84"))
+spgeo  <- as.data.frame(spgeo)
+colnames(spgeo) <- c("lng","lat")
+df_final <- cbind(couch_data, spgeo)
+
+
+df_final <- st_as_sf(df_final, coords = c("lng", "lat"),
+                     remove = FALSE, crs = 4326, agr = "constant")
+
+df_transform <- df_final %>% 
+  mutate(Cu_ppm_log = log(Cu_ppm),
+         Ag_ppm_log = log(Ag_ppm_com),
+         Au_ppm_log = log(Au_ppb_com),
+         As_ppm_log = log(As_ppm_com),
+         Sb_ppm_log = log(Sb_ppm_com))
+
+mapview(df_transform, zcol=c("Cu_ppm_log","Ag_ppm_log", "Au_ppm_log","As_ppm_log", "Sb_ppm_log"), hide=TRUE)
+
+cols = c("green", "yellow", "red")
+
+m1 <- mapview(df_transform, zcol="Cu_ppm_log", col.regions = cols,
+              popup = popupTable(df_transform,
+                                   zcol =c("Cu_ppm")))
+
+m2 <- mapview(df_transform, zcol="Ag_ppm_log", col.regions = cols,
+              popup = popupTable(df_transform,
+                                 zcol =c("Ag_ppm_com")))
+
+m3 <- mapview(df_transform, zcol="Au_ppm_log", col.regions = cols,
+              popup = popupTable(df_transform,
+                                 zcol =c("Au_ppb_com")))
+
+m4 <- mapview(df_transform, zcol="As_ppm_log", col.regions = cols,
+              popup = popupTable(df_transform,
+                                 zcol =c("As_ppm_com")))
+
+m5 <- mapview(df_transform, zcol="Sb_ppm_log", col.regions = cols,
+              popup = popupTable(df_transform,
+                                 zcol =c("Sb_ppm_com")))
+
+leafsync::sync(m1, m2, m3, m4, m5)
+```
+
+# Un poco más de estadísticas
+
+Unas **pocas lineas** :D! ::happy::
+
+```{r}
+par(mfrow=c(2,2))
+plot(log(df_final$Cu_ppm))
+hist(log(df_final$Cu_ppm))
+plot(density(log(df_final$Cu_ppm)))
+boxplot(log(df_final$Cu_ppm))
+```
+
+# Análisis Avanzado
+
+```{r}
+# library(MASS)
+# b <- boxcox(lm(df_final$Cu_ppm ~ 1))
+# b <- boxcox(lm(df_final$Ag_ppm_com ~ 1))
+# b <- boxcox(lm(df_final$`Al _%` ~ 1))
+# b <- boxcox(lm(df_final$As_ppm_com ~ 1))
+# b <- boxcox(lm(df_final$Au_ppb_com ~ 1))
+# b <- boxcox(lm(df_final$`Ba _ppm` ~ 1))
+# b <- boxcox(lm(df_final$Bi_ppm_com ~ 1))
+# 
+# 
+# # Exact lambda
+# lambda <- b$x[which.max(b$y)]
+# new_x_exact <- (df_final$Au_ppb_com ^ lambda - 1) / lambda
+# shapiro.test(new_x_exact) #no rechazamos la hipotesis nula de normalidad
+
+```
+
+# Análisis de Componente Principales (PCA)
+
+```{r}
+library(factoextra); library(FactoMineR)
+sup_tot_pca <- couch_data[ ,9:ncol(couch_data)]
+res.pca_tot <- prcomp(sup_tot_pca, scale = TRUE)
+
+eig.val <- get_eigenvalue(res.pca_tot)
+eig.val
+fviz_eig(res.pca_tot, addlabels = TRUE, ylim=c(0,20))
+
+var <- get_pca_var(res.pca_tot)
+var
+#Circulo de Correlacion:
+#La correlacion entre las variables de los componentes principales son usadas como
+# coordenadas de la variable para los PC. Segun esto las observaciones son representadas
+# por su proyeccion, pero las variables son representadas por sus correlaciones.
+var$coord
+var$cos2
+var$cor
+var$contrib
+fviz_pca_var(res.pca_tot, col.var="black")
+
+fviz_pca_var(res.pca_tot, col.var = "cos2",
+             gradient.cols=c("#00AFBB","#E7B800","#FC4E07"),
+             repel=TRUE)
+
+
+fviz_cos2(res.pca_tot, choice="var",axes=1:2, top=20)
+fviz_contrib(res.pca_tot, choice="var",axis=1,top=20)
+fviz_contrib(res.pca_tot, choice="var",axis=2,top=20)
+fviz_pca_var(res.pca_tot, col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07")
+)
+
+q <- fviz_pca_biplot(res.pca_tot, 
+                     
+                     geom.ind ="point",
+                     fill.ind = couch_data$PROYECTO, col.ind = "black",
+                     pointshape = 21, pointsize = 2,arrowsize=1,
+                     palette = rainbow(2),
+                     addEllipses = TRUE,
+                     ellipse.level= 0.95,
+                     
+                     
+                     col.var = "black",
+                     gradient.cols = "RdYlBu",
+                     legend.title = "Unidad \n Litoestatigráfica",
+                     repel=FALSE
+)
+plotly::ggplotly(q)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
