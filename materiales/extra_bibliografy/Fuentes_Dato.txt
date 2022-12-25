@@ -1,0 +1,62 @@
+Fuentes de datos:
+
+Guru R       : https://www.guru99.com/r-programming-introduction-basics.html
+Datanovia    : https://www.datanovia.com/en/
+Rbloggers    : https://www.r-bloggers.com/
+Rpubs        : https://rpubs.com/
+Stackoverflow: https://stackoverflow.com/ 
+ggplot2      : https://ggplot2.tidyverse.org/index.html
+Minitab      : https://www.minitab.com/en-us/
+Pallidase    : https://www.palisade.com/
+
+Test de Normalidad: 
+
+https://www.statisticshowto.com/lilliefors-test/
+http://finzi.psych.upenn.edu/R/library/nortest/html/lillie.test.html
+https://www.rdocumentation.org/packages/nortest/versions/1.0-4/topics/lillie.test
+https://vivaelsoftwarelibre.com/test-de-kolmogorov-smirnov-en-r/
+https://picandoconr.wordpress.com/2016/08/30/normalidad-shapiro-test-y-lillie-test/
+https://www.rdocumentation.org/packages/compositions/versions/1.40-2/topics/rnorm
+https://support.minitab.com/en-us/minitab/18/help-and-how-to/statistics/basic-statistics/supporting-topics/normality/test-for-normality/
+https://www.spss-tutorials.com/spss-shapiro-wilk-test-for-normality/
+
+Additional graph to normality test:
+
+https://www.investopedia.com/terms/r/residual-standard-deviation.asp
+https://data.library.virginia.edu/diagnostic-plots/
+http://www.sthda.com/english/articles/39-regression-model-diagnostics/161-linear-regression-assumptions-and-diagnostics-in-r-essentials/
+https://www.statmethods.net/stats/rdiagnostics.html
+https://www.r-bloggers.com/leverage-and-influence-in-a-nutshell/
+
+
+Correlation:
+
+https://support.minitab.com/en-us/minitab/18/help-and-how-to/statistics/basic-statistics/how-to/correlation/before-you-start/example/
+https://go.palisade.com/WBN2020-03-20CorrelationEssentials_LP-Watch.html
+
+Test Ros:
+
+https://www.rdocumentation.org/packages/NADA/versions/1.6-1/topics/ros
+
+Identify:
+
+https://stackoverflow.com/questions/23234046/using-the-identify-function-in-r
+
+
+Administrar Ventanas en R:
+
+https://rpubs.com/Rortizdu/140109
+Identifying and labeling boxplot outliers in R: https://www.dsquintana.blog/labeling-boxplot-outliers/
+https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html
+
+ggplot2: 
+
+https://ggplot2.tidyverse.org/index.html
+http://www.cookbook-r.com/Graphs/Facets_(ggplot2)/
+http://www.sthda.com/english/wiki/ggplot2-facet-split-a-plot-into-a-matrix-of-panels
+http://www.sthda.com/english/wiki/ggplot2-point-shapes
+https://ggplot2.tidyverse.org/reference/theme.html
+https://ggplot2.tidyverse.org/reference/guide_legend.html
+https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html
+https://www.datanovia.com/en/blog/ggplot-legend-title-position-and-labels/
+
