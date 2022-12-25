@@ -1,0 +1,596 @@
+<html lang="" xml:lang="">
+  <head>
+    <title>Desarrollo de Aplicativo Web para el Análisis de Dato de la Calidad de Agua</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="A.Otiniano &amp; J.Andrade" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Desarrollo de Aplicativo Web para el Análisis de Dato de la Calidad de Agua
+## ⚔<br/>ACT15
+### A.Otiniano &amp; J.Andrade
+### Centro de Investigación Nacional de Riesgo Geológico (CINARGEO), INGEMMET
+### 2022/03/18 (updated: 2022-03-18)
+
+---
+
+
+layout: true
+
+background-image: url("http://www.branext.com/images/background.jpg")
+background-size: cover
+
+
+
+---
+class: center, middle
+
+&lt;img src="http://www.branext.com/images/cinargeo.jpg" width="30%" /&gt;
+
+---
+
+### 👋 Hola
+
+### Soy: **Geo. Joseps Andrade Choque**
+
+- **Investigador Ciencia de Datos Geológico - INGEMMET  **, _Universidad Nacional de Ingenieria_
+
+- **Publicaciones**:
+   
+   - [Study to Determine Levels of Cadmium in Cocoa Crops Applied to Inland Areas of Peru: “The Case of the Campo Verde-Honoria Tournavista Corridor”](https://www.mdpi.com/2073-4395/10/10/1576).
+   - [A Prototype of Speech Interface Based on the Google Cloud Platform to Access a Semantic Website](https://www.mdpi.com/2073-8994/10/7/268).
+   - [Inspección técnica de línea base geoambiental de la cuenca del río Puyango-Tumbes (lado peruano). Región Tumbes](https://hdl.handle.net/20.500.12544/2923).
+   - [Evaluación hidrogeológica y geoambiental en la comunidad de contacto inicial Santa Rosa de Serjali. Región Ucayali, provincia Atalaya, distrito Sepahua](https://hdl.handle.net/20.500.12544/2891).
+   - [Estudio hidrogeológico del Refugio de Vida Silvestre Los Pantanos de Villa, Chorrillos - Lima](https://hdl.handle.net/20.500.12544/2241).
+   - [Estudio hidrogeológico de las lagunas: La Milagrosa, La Mellicera y La Encantada, de Las Salinas de Chilca, provincia de Cañete - Chilca](https://hdl.handle.net/20.500.12544/3067).
+
+- **Organizador:** [INGEMMET](https://www.gob.pe/ingemmet)
+
+---
+
+### 👋 Hola También
+
+### Soy: **Geo. Alonso Otiniano Zavala**
+
+- **Investigador Ciencia de Datos Geológico - INGEMMET  **, _Universidad Nacional de Ingenieria_
+
+- **Publicaciones**:
+   
+   - [Study to Determine Levels of Cadmium in Cocoa Crops Applied to Inland Areas of Peru: “The Case of the Campo Verde-Honoria Tournavista Corridor”](https://www.mdpi.com/2073-4395/10/10/1576).
+   - [Inspección técnica de línea base geoambiental de la cuenca del río Puyango-Tumbes (lado peruano). Región Tumbes](https://hdl.handle.net/20.500.12544/2923).
+   - [Evaluación hidrogeológica y geoambiental en la comunidad de contacto inicial Santa Rosa de Serjali. Región Ucayali, provincia Atalaya, distrito Sepahua](https://hdl.handle.net/20.500.12544/2891).
+   - [Estudio de línea base geoambiental de las subcuencas Vilcabamba, Santo Tomás y Alto Apurímac (Cusco - Apurímac)](https://hdl.handle.net/20.500.12544/3074).
+
+- **Web Page:** [Geoscience Blog](https://webaoz2.netlify.app)
+
+---
+class: inverse, center, middle
+
+# Tópicos
+
+---
+
+## Problemática:
+
+- El estado como proveedor de herramientas de análisis geocientífico.
+
+- Herramientas online multiplataforma.
+
+- El *tratamiento-procesamiento* de información hidroquímica en herramientas convencionales requiere un **mayor rango de tiempo de trabajo**.
+
+- El **costo** en la adquisión de software para el procesamiento de datos químicos del agua impacta el presupuesto de los investigadores, *sobre todo en universidades*.
+
+
+- Los desarrollos propios en los actuales softwares de análisis hidroquímico no se presentan como opción, y de existir, son métodos complejos.
+
+---
+
+## Objetivos: 
+
+- Proveer de herramientas multiplataforma para análisis geocientífico a la comunidad investigadora nacional como labor del servicio geológico y de investigación geocientífica nacional (INGEMMET).
+
+- Reducir drásticamente los tiempo de trabajo no interpretativo de tratamiento y procesamiento de información.
+
+- La puesta en funcionamiento y de libre disponibilidad de aplicativos orientados al análisis de información hidróquimica.
+
+
+---
+
+class: inverse, middle, center
+
+# INTRODUCCIÓN
+
+---
+
+## INTRODUCCIÓN
+
+En la actualidad la capacidad y velocidad de internet ha incrementado, como en algun momento lo predijo [Tim Berners-Lee](https://en.wikipedia.org/wiki/Tim_Berners-Lee), el internet sufriría de puntos de inflexión respecto al tráfico, transmisión de datos, tipos de datos y el procesamiento online de los datos. En la actualidad nos encontramos en la puerta de entrada a la [WEB 3.0]()
+
+
+&gt; I have a dream for the Web [in which computers] become capable of analyzing all the data on the Web – the content, links, and transactions between people and computers. A “Semantic Web,” which makes this possible, has yet to emerge, but when it does, the day-to-day mechanisms of trade, bureaucracy, and our daily lives will be handled by machines talking to machines.
+&gt;
+&gt; Tim Berners-Lee, 1999.
+
+
+INGEMMET en la misión de encontrarse a la par de los mejores centros de investigación geocientífica en el mundo, ha estado realizando desarrollos propios en el campo de las geociencias con herramientas como:  **estadística, geoestadística, machine learning**, etc. Poniendo esta información ha disposición en las diversas publicaciones de la institución, las herramientas creadas con este fin inicial, evolucionaron para poder fusionarse en el entorno web 3.0, para así poner a disposición de los investigadores nacionales estos desarrollos en un entorno intuitivo y fácil de usar.
+
+---
+
+class: inverse, middle, center
+
+# MÉTODO
+
+---
+
+## Método
+
+- **Desarrollos de Módulos** de Análisis correspondientes a: *Entrada de Información, Exploración de Datos, Análisis Bivariante, Parámetros Físico-Químicos, Análisis Hidroquímico, PCA Plot2D y PCA Summary*.
+
+- La **información** consiste en data&lt;sup&gt;1&lt;/sup&gt; de variables cuantitativas:
+
+      * Ph, Ce, TDS, Ca, K, Mg, Na, Cl, SO4, HCO3 y CO3.
+
+- Variables cualitativas:
+
+      * Codigo, Temporada, Tipo de Fuente, Clase de Fuente, rating color pH, clase de pH.
+
+La información cuantitativa son variables físico-químicas y elementos mayoritarios (en mg/l), mientras que la data cualitativa son factores determinados representativos para analizar&lt;sup&gt;2&lt;/sup&gt;.
+
+.footnote[
+[1] Las varibles consideradas son básicas, se integrarán más varibles para el análisis.
+
+[2] Los desarrollos geoespaciales se mostrarán más adelante, los cuales se integrarán a estos módulos.
+]
+
+---
+
+class: inverse, middle, center
+
+# DESARROLLO
+
+---
+
+.panelset[
+
+.panel[
+.panel-name[Previo]
+&lt;img src="http://www.branext.com/imgs/001.jpg" width="85%" style="display: block; margin: auto;" /&gt;
+]
+
+.panel[
+.panel-name[Codigo Panel]
+
+```r
+tabPanel(
+  title = "HIDROANALYSIS PROTOTYPE",
+  titlePanel("HIDROANALYSIS"),
+  sidebarLayout(
+    sidebarPanel(
+      title = "Inputs",
+*     fileInput("csv_input", "Select file (CSV)",
+                accept = ".csv"),
+      
+      selectInput("num_var_1", "Numerical Variable 1", choices = c(not_sel)),
+      selectInput("num_var_2", "Numerical Variable 2", choices = c(not_sel)),
+      selectInput("fact_var", "Factor Variable 1", choices = c(not_sel)),
+      selectInput("fact_var2", "Factor Variable 2", choices = c(not_sel)),
+      br(),
+      actionButton("run_button", "Run Hydroanalysis", icon = icon("play")),
+      checkboxInput(inputId = "show_data", label="Show data", value = FALSE),
+      passwordInput("password", "Password:"),
+      actionButton("go", "Go"),
+      verbatimTextOutput("value")
+    )
+```
+]
+]
+
+---
+
+.panelset[
+
+.panel[
+.panel-name[Data Exploration]
+&lt;img src="http://www.branext.com/imgs/002.jpg" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.panel[
+.panel-name[Univariante Analisis]
+&lt;img src="http://www.branext.com/imgs/003.jpg" width="70%" height="65%" style="display: block; margin: auto;" /&gt;
+]
+
+.panel[
+.panel-name[Codigo DE]
+
+```r
+# tableplot
+  output$tableplot1 &lt;- renderPlot({
+    if(is.null(data_input())) return()
+    the_data &lt;- data_input()
+*   tabplot::tableplot(the_data)
+  })
+  
+# display a table of the CSV contents
+*   output$contents &lt;-  DT::renderDataTable({
+      datatable(data_input(), extensions = c(
+        "Buttons",  # add download buttons, etc
+        "Scroller"  # for scrolling down the rows rather than pagination
+      ),rownames = FALSE,  # remove rownames
+      filter = "top",
+      options = list(
+*       dom = "Blrtip",  # specify content (search box, etc)
+        deferRender = TRUE,
+        scrollY = 300,
+        scroller = TRUE,
+        buttons = list(I("colvis"),'copy', 'csv', 'excel', 'pdf', 'print')))})
+```
+]
+]
+
+---
+
+.panelset[
+.panel[
+.panel-name[Bivariante Analisis]
+&lt;img src="http://www.branext.com/imgs/004.jpg" width="80%" style="display: block; margin: auto;" /&gt;
+]
+
+.panel[
+.panel-name[Codigo BA]
+
+```r
+  #Plot2:
+  
+* output$plt2&lt;-renderPlot({
+    req(data_input())
+    ggplot(data_input(), aes(x=pH, y=CE))+
+      geom_point()+geom_line()
+  })
+```
+]
+]
+
+---
+
+.panelset[
+.panel[
+.panel-name[Bivariante Analisis]
+&lt;img src="http://www.branext.com/imgs/005.jpg" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.panel[
+.panel-name[Codigo BA]
+
+```r
+#GGPAIRS ANALISIS HIDROQUIMICO
+# if(input$data_input != is.null){
+# output$p &lt;- ggpairs(data_input[ ,1:2], aes(color = Species))+ theme_bw()}
+  ggpa &lt;- eventReactive(input$run_button,{
+    df&lt;-data_input() %&gt;% select("pH","CE","Ca","K","SO4","HCO3",
+                                # "CO3", "Subcuenca","Tipo_Fuente","Clase_Fuente","TDS",
+                                "Temporada")
+*   highlight(ggplotly(ggplotly(ggpairs(df, columns = 1:7, ggplot2::aes(colour=Temporada)))), on = "plotly_selected")
+  })
+  output$ggpa &lt;- renderPlotly({
+    progress&lt;-Progress$new(session, min=1,max=20)
+    on.exit(progress$close())
+    progress$set(message="CALCULATION IN PROGRESS...",
+                 detail ="The waiting time depends on your RAM and Internet")
+    for (i in 1:15){
+      progress$set(value=1)
+      Sys.sleep(0.5)
+    }
+    ggpa()
+    
+  })
+```
+]
+]
+
+---
+
+.panelset[
+.panel[
+.panel-name[Piper Analisis]
+&lt;img src="http://www.branext.com/imgs/006.jpg" width="90%" style="display: block; margin: auto;" /&gt;
+]
+.panel[
+.panel-name[Codigo Piper 1]
+
+```r
+*ggplot_piper &lt;- function(piper.data,output = c("ggplot","plotly")) {
+  grid1p1 &lt;&lt;- data.frame(x1 = c(20,40,60,80), x2= c(10,20,30,40),y1 = c(0,0,0,0), y2 = c(17.3206,34.6412,51.9618, 69.2824))
+  grid1p2 &lt;&lt;- data.frame(x1 = c(20,40,60,80), x2= c(60,70,80,90),y1 = c(0,0,0,0), y2 = c(69.2824, 51.9618,34.6412,17.3206))
+  grid1p3 &lt;&lt;- data.frame(x1 = c(10,20,30,40), x2= c(90,80,70,60),y1 = c(17.3206,34.6412,51.9618, 69.2824), y2 = c(17.3206,34.6412,51.9618, 69.2824))
+  grid2p1 &lt;&lt;- grid1p1
+  grid2p1$x1 &lt;- grid2p1$x1+120
+  grid2p1$x2 &lt;- grid2p1$x2+120
+  grid2p2 &lt;&lt;- grid1p2
+  grid2p2$x1 &lt;- grid2p2$x1+120
+  grid2p2$x2 &lt;- grid2p2$x2+120
+  grid2p3 &lt;&lt;- grid1p3
+  grid2p3$x1 &lt;- grid2p3$x1+120
+  grid2p3$x2 &lt;- grid2p3$x2+120
+  grid3p1 &lt;&lt;- data.frame(x1=c(100,90, 80, 70),y1=c(34.6412, 51.9618, 69.2824, 86.603), x2=c(150, 140, 130, 120), y2=c(121.2442,138.5648,155.8854,173.2060))
+  grid3p2 &lt;&lt;- data.frame(x1=c(70, 80, 90, 100),y1=c(121.2442,138.5648,155.8854,173.2060), x2=c(120, 130, 140, 150), y2=c(34.6412, 51.9618, 69.2824, 86.603))
+```
+]
+
+.panel[
+.panel-name[Codigo Piper 2]
+
+```r
+#Piper:
+*  transform_piper &lt;- eventReactive(input$run_button,{
+*  transform_piper_data(toPercent(data_input()))
+ })
+  piper_data &lt;- eventReactive(input$run_button,{
+    dt&lt;-toPercent(data_input())
+    dt1&lt;-transform_piper_data(toPercent(data_input()))
+    piper_data &lt;- merge(dt1,
+                        dt[,c("Codigo","Temporada","Subcuenca","Tipo_Fuente","Clase_Fuente",
+                              "Ca","K","Mg","Na","Cl","SO4","HCO3","CO3")],
+                        by.x = "observation",
+                        by.y = "Codigo")
+    piper_data
+  })
+  output$piper&lt;-renderPlotly({
+*   ggplot_piper(piper_data(), output = "plotly")
+    
+  })
+  filtered_df&lt;-eventReactive(input$run_button,{
+    res&lt;-data_input() %&gt;% select("Codigo","pH","CE","TDS","Ca","K","Mg","Na","Cl","SO4","HCO3","CO3","Temporada","Subcuenca","Tipo_Fuente","Clase_Fuente")})
+```
+]
+]
+
+---
+
+.panelset[
+.panel[
+.panel-name[PCA]
+&lt;img src="http://www.branext.com/imgs/007.jpg" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+.panel[
+.panel-name[Codigo BA]
+
+```r
+#PCA_valor:  
+  pca &lt;- eventReactive(input$run_button,{
+   df &lt;- data_input() %&gt;% select("pH","CE") # ,"Ca","K","SO4","HCO3","CO3","TDS"
+   prcomp(df, scale = TRUE)
+    
+  })
+* output$pca &lt;- renderPlotly({
+    q &lt;- fviz_pca_biplot(pca(), 
+                         geom.ind = "point",
+                         col.ind = "black",
+                         pointshape = 21, pointsize = 2,
+                         #palette = rainbow(15),
+                         addEllipses = TRUE,
+                         ellipse.level= 0.95,
+                         alpha.var ="contrib", col.var = "contrib",
+                         radient.cols = "RdYlBu",
+                         # legend.title = list(fill = "NAME"),
+                         repel=FALSE)
+    ggplotly(q)
+  })
+```
+]
+]
+---
+
+## PCA
+
+&lt;img src="http://www.branext.com/imgs/008.jpg" width="85%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## PCA
+
+&lt;img src="http://www.branext.com/imgs/009.jpg" width="85%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Modulo Mapa
+
+&lt;img src="http://www.branext.com/imgs/010.jpg" width="85%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Futuras implementaciones
+
+* [Hydrogeoanalisis](http://www.branext.com/dev/hidro/Hydro_Geoanalysis.html)
+
+* [Hydrogeoanalisis 2](http://www.branext.com/dev/hidro/LBG_Tumbes.html)
+
+### Aplicativo
+
+* [INGEHYDROMIN](https://alonso-otiniano.shinyapps.io/Hidrogeo_V1/)
+
+---
+
+background-image: url('https://slides.yihui.org/gif/saw-branch.gif')
+background-size: cover
+class: left, top, inverse
+
+# Yo puedo solo!!!
+
+---
+
+background-image: url("https://media1.tenor.com/images/28ee6748d1e75ed138a58dfda27a0469/tenor.gif?itemid=4855087")
+background-position: center
+background-size: contain
+class: inverse
+
+# EL PODER DE TRABAJAR EN WEB !
+
+---
+
+### Conclusiones:
+
+- Las herramientas geoinformaticas de **desarrollo puro** en las instituciones públicas se encuentran a la par en funcionalidades con software comerciales de forma gratuita, ofreciendo utilidades similares, con posibilidad de agregar desarrollos y dirigidos a la comunidad geocientífica.
+
+- El ahorro en tiempo del tratamiento-procesamiento y ploteo de resultados optimiza el trabajo de investigadores geocientíficos.
+
+- La version `\(alpha\)` en la que se presenta el desarrollo del aplicativo se pondrá a modo de prueba en uso para su test de funcionalidad.
+
+### Recomendaciones:
+
+- En la etapa de desarrollo, las continuas pruebas que se realizan sobre los algoritmos requieren capacidades altas de procesamiento, requiriéndose equipos óptimos.
+
+- Los equipos de trabajo deben ser multidisciplinarios, liderados por geocientíficos con alto conocimiento de herramientas geoinformáticas.
+
+- Los desarrollos informáticos en geociencias deben culminar en productos de uso intuitivo.
+
+---
+class: center
+
+# Avanzando en Geociencias - INGEMMET (印)
+
+Siempre Adelante
+
+![](https://upload.wikimedia.org/wikipedia/commons/7/7e/Mudra-Naruto-KageBunshin.svg)
+
+---
+
+class: center, middle
+
+# Muchas Gracias!
+
+Slides son creados via el R package [**xaringan**](https://github.com/yihui/xaringan).
+
+El chacra proviene de [remark.js](https://remarkjs.com), [**knitr**](https://yihui.org/knitr/), y [R Markdown](https://rmarkdown.rstudio.com).
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

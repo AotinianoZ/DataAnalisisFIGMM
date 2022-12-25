@@ -1,0 +1,218 @@
+---
+title: "Desarrollo de Aplicativo Web para el Análisis de Dato de la Calidad de Agua"
+author: "ACT15 - A. Otiniano & J. Andrade"
+date: "2/6/2021"
+output:
+  ioslides_presentation:
+    css: ['pres.css', 'CSSBackgrounds.css']
+    smaller: yes
+    widescreen: yes
+  slidy_presentation: default
+  beamer_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse); library(plotly); library(sf); library(mapview)
+library(DT); library(knitr); library(crosstalk); library(kableExtra)
+library(htmltools); library(leaflet)
+```
+
+# Puntos Iniciales
+
+## Problematicas: 
+
+>- Existen **campos combinados**.
+
+>- Ausencia variables (columnas) con **más del 75% de datos** en revisión visual.
+
+>- Desconocimiento del total de atributos que existen en la **Base de Datos Geocientífica**, lo cual genera un reporte excel no apto para tratar directamente con metodologías de **modelos de predicción no supervisados y supervisados**.
+
+>- No existe un **análisis integral de la base de datos de peligros geológicos**.
+
+## Limitaciones
+
+>- En la base de datos de peligro la data de la variable _granulometría, composición de suelo_ es escasa, se encontraron **75** instancias llenas con estos datos de **35270**.
+
+>- La totalidad de la data requiere alta capacidad de procesamiento (>64 Gb RAM) solo para información puntual sin tomar en cuenta integraciones raster.
+
+>- La mayoría de los _papers_ usan el índice **NDVI** que es usado para cobertura vegetal, la cual no se cuenta actualmente, se consulto con personal de sensores remotos y se podria obtener en 3 meses el NDVI del Perú, se necesitarian para el mosaico 100 cuadrículas Landsat para coberturar de todo el Perú.
+
+>- La data existente puede ser usada solo en la búsqueda de patrones más no para predicción de eventos ya que no se cuenta con parámetros de **precipitación u otras ocurrencias**. 
+
+>- No existe integración de otras fuentes de datos para la **búsqueda de patrones o predicción**.
+
+>- No existe dato de proximidad (distancia) en los puntos tomados hacia estructuras geológicas.
+
+
+## Soluciones: 
+
+>- Reestructuración de **Base de Datos con parámetros a utilizar**.
+
+>- Análisis de la **Base de Datos de Peligros Geológicos**.
+
+>- Integración de Información de **DEM a 30m** con esto se obtiene las variables _pendiente_, _elevación_, **base de datos geológica de la DGR-INGEMMET** con esto se obtiene variable _unidades litoestatigráficas_, **base de datos geomorfológica**.
+
+>- Realizar prototipos de modelos de aprendijaze supervisado (**predicción**) y aprendizaje no supervisado (**patrones**).
+
+>- Integración de distancias hacia las estructuras geológicas.
+
+## Paper Internacional:
+
+Se muestran 07 investigaciones internacionales analizadas en revistas Q1 indexadas: [A Hybrid Model Consisting of Supervised and Unsupervised Learning for Landslide Susceptibility Mapping](https://www.mdpi.com/2072-4292/13/8/1464) y [Multi-Hazard Exposure Mapping Using Machine Learning Techniques: A Case Study from Iran](https://www.mdpi.com/2072-4292/11/16/1943)
+
+```{r image_grobs01, fig.show = "hold", out.width = "50%", fig.align = "default", eval=FALSE}
+knitr::include_graphics("Paper01.PNG")
+knitr::include_graphics("Paper02.PNG")
+```
+
+- - - -
+
+```{r image_grobs02, fig.show = "hold", out.width = "100%", fig.align = "default", eval=FALSE}
+knitr::include_graphics("Figuras.png")
+```
+
+## Tópicos | Principales
+
+>- Análisis de la Información de Peligros Geológicos.
+
+>- Filtros de Información.
+
+>- Mapa con filtros  tiempo real.
+
+# Análisis Exploratorio de Datos:
+
+Revisión de la información preliminar obtenida de los DEM, Base de Datos DGR y DGAR.
+
+
+## Obtención de la Información:
+
+`Carga` de la información adjunta de manera **puntual**, revisión de la cantidad de *nulos* por columna, estructura y nombre de las columnas:
+
+```{r, echo=TRUE, eval=FALSE}
+# Carga de la información:
+Peligros <- read.csv(file="peligros_cuencas.csv", header = TRUE, encoding = "UTF-8")
+
+Peligros <- read.csv(file= "")
+Peligros[Peligros == ""] <- NA
+```
+
+- - - -
+
+Se cuenta con **35270 observaciones con  93 variables**:
+
+```{r, eval=FALSE}
+# Estructura de las variables:
+str(Peligros[ ,26:50])
+```
+
+- - - -
+
+```{r, eval=FALSE}
+# Estructura de las variables:
+str(Peligros[ ,26:50])
+```
+
+- - - -
+Las **celdas vacías** se observan a continuación:
+
+```{r, eval=FALSE}
+#Conteo de Nulos por columna: 
+sapply(Peligros[ ,1:56], function(x)sum(is.na(x)))
+```
+
+- - - -
+
+```{r, eval=FALSE}
+#Conteo de Nulos por columna: 
+sapply(Peligros[ ,57:93], function(x)sum(is.na(x)))
+```
+
+
+## Análisis Exploratorio de Datos:{.smaller}
+
+Se seleccionan las variables **Cod_Int, Lat, Long, Zona, Dpto, Prov, T.Peligro, N.Esp, m, h, Ab.Fm, Hoja, SubCuenca, Cod.SubCuenca, Cuenca, Cod.Cuenca** para análisis.
+
+- - - -
+
+```{r, include=TRUE, highlight=TRUE, out.width="100%", message=FALSE, eval=FALSE}
+summary(Peligros2[ ,8:16])
+```
+
+- - - -
+<span style="color:red">Tipo de Peligro por Departamento: </span>
+
+```{r, include=FALSE, eval=FALSE}
+Filtro1 <- Peligros2 %>% 
+  group_by(Dpto) %>% 
+  summarise(
+    n = n(),
+    min.h = min(h, na.rm = FALSE),
+    h.25    = quantile(h, probs = 0.25, na.rm =FALSE),
+    h.50    = quantile(h, probs = 0.50, na.rm =FALSE),
+    h.75    = quantile(h, probs = 0.75, na.rm =FALSE),
+    max.h = max(h, na.rm = FALSE)
+  ) %>%
+  arrange(desc(n))
+```
+
+```{r, message=FALSE, message=FALSE, eval=FALSE}
+datatable(Filtro1, filter = "top")
+```
+
+- - - -
+<span style="color:red">Tipo de Peligro por Cuenca: </span>
+
+```{r, include=FALSE, message=FALSE, eval=FALSE}
+Filtro2 <- Peligros2 %>% 
+  group_by(Cuenca) %>% 
+  summarise(
+    n = n(),
+    min.h = min(h, na.rm = FALSE),
+    h.25    = quantile(h, probs = 0.25, na.rm =FALSE),
+    h.50    = quantile(h, probs = 0.50, na.rm =FALSE),
+    h.75    = quantile(h, probs = 0.75, na.rm =FALSE),
+    max.h = max(h, na.rm = FALSE)
+  ) %>%
+  arrange(desc(n))
+```
+
+```{r, message=FALSE, eval=FALSE}
+datatable(Filtro2, filter = "top")
+```
+
+- - - -
+<span style="color:red">Tipo de Peligro por Tipo de Peligro: </span>
+
+```{r, include=FALSE, message=FALSE, eval=FALSE}
+Filtro2.1 <- Peligros2 %>% 
+  group_by(T.Peligro) %>% 
+  summarise(
+    n = n(),
+    min.h = min(h, na.rm = FALSE),
+    h.25    = quantile(h, probs = 0.25, na.rm =FALSE),
+    h.50    = quantile(h, probs = 0.50, na.rm =FALSE),
+    h.75    = quantile(h, probs = 0.75, na.rm =FALSE),
+    max.h = max(h, na.rm = FALSE)
+  ) %>%
+  arrange(desc(n))
+```
+
+```{r, message=FALSE, eval=FALSE}
+datatable(Filtro2.1, filter = "top")
+```
+
+- - - -
+
+## Full size image background {data-background="background.jpeg"}
+
+Alonso Otiniano Zavala
+
+## Mapa Puntos con Filtros
+
+Se genero un mapa con filtros en html de la información inicial obtenida en el siguiente link: [PELIGROS ANÁLISIS GEOESPACIAL](file:///D:/1.1Autonoo_AI/2do_Entregable/AED_PELIGROS/Pel_002.html)
+
+```{r, fig.show = "hold", out.width='100%', fig.align = "center", fig.align='center', eval=FALSE}
+knitr::include_graphics("AP001.PNG")
+```
+
